@@ -36,3 +36,13 @@ form{
     text-decoration: none;
     color: deepskyblue;
 }
+.pError{
+    color: red;
+    margin-top:  10px;
+    margin-bottom: 0;
+    display: none;
+}
+.showError{
+    display: block;
+    border:1px solid red;
+}

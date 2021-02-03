@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './index.module.css';
 import {Link} from "react-router-dom";
 
 const LoginPage = () =>{
-
-    const handleOnChange = (e) => {
-        const val = e.target.value;
+    const [form,setForm] = useState({email:'',password:''});
 
 
-
-        if(val.trim().length > 6){
-
+    const validateForm = (x) =>{
+        if(x.email === ''){
+            console.log('require E')
         }
-        else{
-
+        if(x.password === ''){
+            console.log('require P')
         }
+    };
 
 
 
-    }
+    const handlerOnChange = (e) => {
+
+
+        setForm({...form, [e.target.name] : e.target.value} );
+
+        validateForm(form)
+
+    };
+
 
     return (
         <div className={styles.signInPage}>
@@ -26,11 +33,13 @@ const LoginPage = () =>{
             <form>
                 <div className={styles.formItem}>
                     <label htmlFor="email"> Email </label>
-                    <input type="text" id='email' onChange={handleOnChange}/>
+                    <input name='email' type="email" id='email' value={form.email} onChange={handlerOnChange()} />
+                    <p className={styles.pError}> Please type at least 6 letters </p>
                 </div>
                 <div className={styles.formItem}>
                     <label htmlFor="password"> Password </label>
-                    <input type="password" id='password' onChange={handleOnChange}/>
+                    <input name='password' type="password" id='password' value={form.password} onChange={handlerOnChange} />
+                    <p className={styles.pError}> Please type at least 6 letters </p>
                 </div>
                 <div className={styles.formItem}>
                     <button type="button"> Sign In </button>
