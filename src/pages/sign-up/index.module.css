@@ -1,4 +1,4 @@
-.signInPage{
+.signUpPage{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,8 +41,4 @@ form{
     margin-top:  10px;
     margin-bottom: 0;
 }
-.pSuccess{
-    color: green;
-    margin-top:  10px;
-    margin-bottom: 0;
-}
+

@@ -1,52 +1,64 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import styles from './index.module.css';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import useForm from "../../customHook/useForm";
+import firebase from "firebase";
 
-const LoginPage = () =>{
-    const [form,setForm] = useState({email:'',password:''});
+const SignInPage = () =>{
+
+    let history = useHistory()
+    const [note,setNote] = useState('')
+
+    useEffect(() => {
+        const db = firebase.database();
+    },[])
+
+    const submit = () => {
+        firebase.auth().signInWithEmailAndPassword(form.email,form.password)
+            .then((e) => {
+
+                firebase.auth().currentUser.getIdToken(true)
+                    .then((idToken) => {
+                        localStorage.setItem('token',idToken)
+                    })
+                    .then(()=>{
+                        history.push("/dashboard")
+                    })
+            })
+            .catch(e => {
+                setNote(e.message)
+            })
 
 
-    const validateForm = (x) =>{
-        if(x.email === ''){
-            console.log('require E')
-        }
-        if(x.password === ''){
-            console.log('require P')
-        }
-    };
+
+    }
 
 
+    const { handleOnChange , handleSubmit, form ,err } = useForm(submit)
 
-    const handlerOnChange = (e) => {
-
-
-        setForm({...form, [e.target.name] : e.target.value} );
-
-        validateForm(form)
-
-    };
 
 
     return (
         <div className={styles.signInPage}>
             <h2> Sign In </h2>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className={styles.formItem}>
                     <label htmlFor="email"> Email </label>
-                    <input name='email' type="email" id='email' value={form.email} onChange={handlerOnChange()} />
-                    <p className={styles.pError}> Please type at least 6 letters </p>
+                    <input name='email' type="email" id='email' value={form.email} onChange={handleOnChange} />
+                    {err.email && (<p className={styles.pError}> {err.email} </p>)}
                 </div>
                 <div className={styles.formItem}>
                     <label htmlFor="password"> Password </label>
-                    <input name='password' type="password" id='password' value={form.password} onChange={handlerOnChange} />
-                    <p className={styles.pError}> Please type at least 6 letters </p>
+                    <input name='password' type="password" id='password' value={form.password} onChange={handleOnChange} />
+                    {err.password && (<p className={styles.pError}> {err.password} </p>)}
                 </div>
                 <div className={styles.formItem}>
-                    <button type="button"> Sign In </button>
-                    <p> <Link to='/'> Sign Up </Link> if you dont have an account. </p>
+                    <button type="submit"> Sign In </button>
+                    <p> <Link to='/sign-up'> Sign Up </Link> if you dont have an account. </p>
                 </div>
             </form>
+            {note &&  (<p className={styles.pError}> {note} </p>)}
         </div>
     )
 }
-export default LoginPage;
+export default SignInPage;
