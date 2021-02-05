@@ -11,6 +11,7 @@ const MainPage = () => {
             <nav className={styles.nav}>
                 <Link to='/sign-in'> Sign In </Link>
                 <Link to='/sign-up'> Sign up </Link>
+                {localStorage.getItem('token') && <Link to='/dashboard'> Dashboard </Link>}
             </nav>
         </div>
 
