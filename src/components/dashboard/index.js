@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import firebase from "firebase";
 import Loader from "../loader";
 import DashBody from './dashBody';
+import CreateTask from "./createTask";
 
 const Dashboard = () => {
     let jsx;
@@ -37,8 +38,10 @@ const Dashboard = () => {
                     <h1> Hello Admin</h1>
                     <button onClick={logout}> LogOut </button>
                 </div>
+                <CreateTask/>
                 <div className={styles.dashboardBody}>
-
+                    <DashBody/>
+                    {loader && <Loader/>}
                 </div>
             </div>
         )
@@ -50,6 +53,7 @@ const Dashboard = () => {
                     <h1> Hello {user.email}</h1>
                     <button onClick={logout}> LogOut </button>
                 </div>
+
                 <div className={styles.dashboardBody}>
                     <DashBody/>
                     {loader && <Loader/>}

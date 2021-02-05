@@ -1,0 +1,32 @@
+.form{
+    min-width: 1170px;
+    position: relative;
+    margin-bottom: 100px;
+}
+.formItem{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 25px 0;
+}
+.formItem > input,.formItem > textarea{
+    margin-top: 5px;
+    padding: 5px 15px;
+}
+.formItem > label{
+    cursor: pointer;
+}
+.formItem > button{
+    padding: 5px 15px;
+    cursor: pointer;
+    width: 100px;
+}
+.formItem > textarea{
+    height: 200px;
+}
+.pError{
+    color: red;
+    margin-top:  10px;
+    margin-bottom: 0;
+    font-size: 12px;
+}
