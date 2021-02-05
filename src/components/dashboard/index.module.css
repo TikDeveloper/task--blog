@@ -16,4 +16,5 @@
 }
 .dashboardBody{
     width: 1170px;
+    position: relative;
 }

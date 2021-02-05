@@ -4,12 +4,14 @@ import * as Yup from "yup";
 import {useFormik} from "formik";
 import firebase from "firebase";
 import styles from "./index.module.css";
+import Loader from '../loader';
 
 
 const SignIn = () =>{
     let history = useHistory()
     const [err,setErr] = useState()
     const [loader,setLoader] = useState(false)
+
 
 
     const validationSchema = Yup.object({
@@ -31,16 +33,13 @@ const SignIn = () =>{
             setLoader(true)
             const auth = firebase.auth();
             auth.signInWithEmailAndPassword(values.email,values.password)
-                .catch(err => setErr(err.message))
-
-            auth.onAuthStateChanged(user => {
-                if(user){
-                    setLoader(false)
+                .then((event) => {
                     localStorage.clear()
-                    localStorage.setItem('token',user.refreshToken)
-                    history.push('/dashboard',user.email)
-                }
-            })
+                    localStorage.setItem('token',JSON.stringify({uid: event.user.uid ,email: event.user.email }))
+                })
+                .then(() => history.push('/dashboard'))
+                .catch(err => setErr(err.message))
+                .finally(() => setLoader(false))
 
         }
     })
@@ -80,16 +79,7 @@ const SignIn = () =>{
 
 
                 {err && <p className={styles.pError}> {err} </p>}
-                {loader &&
-                <div className={styles.loader}>
-                    <div className={styles.ldsRing}>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                    </div>
-                </div>
-                }
+                {loader && <Loader/> }
             </form>
 
         </div>

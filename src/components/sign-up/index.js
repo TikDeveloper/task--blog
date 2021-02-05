@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import {useFormik} from "formik";
 import firebase from "firebase";
 import styles from "./index.module.css";
-
+import Loader from '../loader';
 
 const SignUp = () => {
     let history = useHistory()
@@ -39,7 +39,7 @@ const SignUp = () => {
                 .createUserWithEmailAndPassword(values.email,values.password)
                 .then(event => {
                     localStorage.clear()
-                    localStorage.setItem('token',event.user.refreshToken)
+                    localStorage.setItem('token',JSON.stringify({uid: event.user.uid ,email: event.user.email }))
                 })
                 .then(() => history.push('/dashboard'))
                 .finally(() => setLoader(false))
@@ -98,16 +98,7 @@ const SignUp = () => {
 
 
                 {err && <p className={styles.pError}> {err} </p>}
-                {loader &&
-                <div className={styles.loader}>
-                    <div className={styles.ldsRing}>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                    </div>
-                </div>
-                }
+                {loader && <Loader/>}
             </form>
         </div>
     )

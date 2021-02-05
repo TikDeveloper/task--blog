@@ -1,34 +1,44 @@
-import React, {useState,useEffect} from 'react';
+import React ,{useState,useEffect} from 'react';
 import styles from "./index.module.css";
 import {useHistory} from 'react-router-dom';
 import firebase from "firebase";
-
+import Loader from "../loader";
+import DashBody from './dashBody';
 
 const Dashboard = () => {
-    const [user,setUser] = useState()
+    let jsx;
     let history = useHistory();
+    const [loader,setLoader] = useState(false)
+    const [user] = useState(JSON.parse(localStorage.getItem('token')) || '')
+
 
     useEffect(() => {
-        setUser(history.location.state)
-    },[])
+        return ()=>{
+            localStorage.clear()
+        }
+    })
+
 
     const logout = (e) =>{
-        firebase.auth().signOut().then(() => {
-            localStorage.removeItem('token')
-            history.push('/sign-in')
-        })
+        setLoader(true)
+        firebase.auth()
+            .signOut()
+            .then(() => {
+                history.push('/sign-in')
+            })
+            .finally(() => setLoader(false))
     }
 
-    let jsx;
-    if(user === 'tiko0000.80.tm@gmail.com'){
+
+    if(user.uid === 'JiZL8X4SL0XhJvcx3vn7Eth5xx43'){
         jsx = (
             <div className={styles.dashboard}>
                 <div className={styles.dashboardHeader}>
-                    <h1> Hello {user}</h1>
+                    <h1> Hello Admin</h1>
                     <button onClick={logout}> LogOut </button>
                 </div>
                 <div className={styles.dashboardBody}>
-                    Admin
+
                 </div>
             </div>
         )
@@ -37,11 +47,12 @@ const Dashboard = () => {
         jsx = (
             <div className={styles.dashboard}>
                 <div className={styles.dashboardHeader}>
-                    <h1> Hello {user}</h1>
+                    <h1> Hello {user.email}</h1>
                     <button onClick={logout}> LogOut </button>
                 </div>
                 <div className={styles.dashboardBody}>
-                    User
+                    <DashBody/>
+                    {loader && <Loader/>}
                 </div>
             </div>
         )
