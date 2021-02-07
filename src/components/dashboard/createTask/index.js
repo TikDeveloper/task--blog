@@ -11,7 +11,7 @@ import Loader from "../../loader";
 const CreateTask = () => {
     const [loader,setLoader] = useState(false)
     const [err,setErr] = useState()
-
+    const [suc,setSuc] = useState()
 
 
 
@@ -36,19 +36,18 @@ const CreateTask = () => {
                 .set({
                     title: values.title,
                     description: values.description,
+                    status: 'to--do',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 })
                 .then(() => {
                     resetForm({values: ''})
-                    alert("Task added !!!")
+                    setSuc('Task is added !!!')
                 })
                 .catch(err => setErr(err.message))
                 .finally(() => setLoader(false))
 
         }
     })
-
-
 
 
     return (
@@ -82,6 +81,7 @@ const CreateTask = () => {
                 </div>
                 {loader && <Loader/>}
                 {err && <p className={styles.pError}> {err} </p>}
+                {suc && <p className={styles.pSuccess}> {suc} </p>}
             </form>
         </div>
     )
