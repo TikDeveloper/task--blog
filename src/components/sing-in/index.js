@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 import Loader from '../loader';
 
 
-const SignIn = () =>{
+const SignIn = () => {
     let history = useHistory()
     const [err,setErr] = useState()
     const [loader,setLoader] = useState(false)
@@ -31,8 +31,8 @@ const SignIn = () =>{
         validationSchema: validationSchema,
         onSubmit: values => {
             setLoader(true)
-            const auth = firebase.auth();
-            auth.signInWithEmailAndPassword(values.email,values.password)
+            const auth = firebase.auth()
+            auth.signInWithEmailAndPassword(values.email, values.password)
                 .then((event) => {
                     localStorage.clear()
                     localStorage.setItem('token',JSON.stringify({uid: event.user.uid ,email: event.user.email }))

@@ -3,6 +3,16 @@
     margin: 10px 0;
     border: 1px solid black;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-evenly;
+}
+.taskDelEdit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.taskDelEdit > svg{
+    cursor: pointer;
 }
 .hideItem{
     display: none;

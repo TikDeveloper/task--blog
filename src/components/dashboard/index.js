@@ -10,17 +10,17 @@ const Dashboard = () => {
     let jsx;
     let history = useHistory();
     const [loader,setLoader] = useState(false)
-    const [user] = useState(JSON.parse(localStorage.getItem('token')) || '')
+    const [user] = useState( JSON.parse(localStorage.getItem('token'))  )
 
 
     useEffect(() => {
-        return ()=>{
+        return () => {
             localStorage.clear()
         }
     })
 
 
-    const logout = (e) =>{
+    const logout = (e) => {
         setLoader(true)
         firebase.auth()
             .signOut()

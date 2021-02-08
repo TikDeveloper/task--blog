@@ -2,7 +2,7 @@ import React from 'react';
 
 import {SignIn} from "../../components";
 
-const SignInPage = () =>{
+const SignInPage = () => {
 
 
     return (

@@ -1,37 +1,21 @@
-import React, {useState,useEffect} from 'react';
+import React  from 'react';
 import styles from './index.module.css';
 import TaskItem from "../taskItem";
 import Loader from "../../../loader";
 import db from '../../../../firebase';
 
-const DashCell = ({title,status}) => {
-    const [tasks,setTasks] = useState( [] )
-    const [loader,setLoader] = useState(true)
-    const [err,setErr] = useState()
-    // const [filteredData,setFilteredData] = useState()
+const DashCell = ({data,loader,err,status,title,updateTasks}) => {
 
-    useEffect(() => {
-        const x = []
-        db.collection('tasks')
-            .orderBy('timestamp','desc')
-            .get()
-            .then(snapshot => {
-                snapshot.forEach(doc => {
-                    x.push({
-                        id: doc.id,
-                        data: doc.data()
-                    })
-                })
-            })
-            .then(() => {
-                setTasks(x)
-            })
-            .finally(() => setLoader(false))
-            .catch(err => setErr(err.message))
-
-
-
-    }, [])
+    // useEffect(() => {
+    //     const dragZones = document.querySelectorAll(styles.dragZone)
+    //     console.log(dragZones)
+    //     dragZones.forEach(item => {
+    //         item.addEventListener('onDragEnter',handleDragEnter)
+    //         item.addEventListener('onDragLeave',handleDragLeave)
+    //         item.addEventListener('onDrop',handleDrop)
+    //
+    //     })
+    // }, [])
 
 
     const handleDragLeave = e => {
@@ -39,66 +23,60 @@ const DashCell = ({title,status}) => {
         e.stopPropagation();
         e.target.classList.remove(styles.hoveredZone)
     }
-
-    const handleDragEnter = e => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.target.classList.add(styles.hoveredZone)
-    }
-
     const handleDragOver = e => {
         e.preventDefault();
         e.stopPropagation();
     }
 
-    const handleDrop = e => {
+    const handleDragEnter = e => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        e.target.classList.add(styles.hoveredZone)
+    }
+
+
+
+
+    const  handleDrop = (e) => {
         e.preventDefault();
         e.stopPropagation();
         e.target.classList.remove(styles.hoveredZone)
         const currentData = JSON.parse(e.dataTransfer.getData('data'))
+        const updatedCurrentData = {
+            ...currentData,
+            data: {
+                ...currentData.data,
+                status: status
+            }
+        }
 
+        updateTasks(updatedCurrentData)
 
         db.collection('tasks')
             .doc(currentData.id)
             .update({
-                status: e.target.getAttribute("data-name")
-            })
-            // .then(SOME WORK TO DOOOOO)
-            .then(() => {
-                const status = e.target.getAttribute("data-name")
-                const filteredTasks = tasks.filter(item => item.id !== currentData.id).filter(item => item.data.status === status)
-
-                // setFilteredData(filteredTasks)
+                status: status
             })
             .finally(() => e.dataTransfer.clearData())
 
     }
-
 
     return (
 
         <div className={styles.cell}>
             <h2> {title} </h2>
             <div className={styles.dragZone}
-                 onDragOver={handleDragOver}
                  onDragLeave={handleDragLeave}
+                 onDragOver={handleDragOver}
                  onDragEnter={handleDragEnter}
                  onDrop={handleDrop}
                  data-name={status}
             >
-                {/*{*/}
-                {/*    filteredData ?*/}
-                {/*        filteredData.map(item => {*/}
-                {/*            return <TaskItem key={item.id} data={item}/>*/}
-                {/*        })*/}
-                {/*        :*/}
-                {/*        null*/}
-                {/*}*/}
                 {
                     !loader ?
-
                         !err ?
-                            tasks.filter(taskItem => taskItem.data.status === status).map(taskItem => {
+                            data.map(taskItem => {
                                 return <TaskItem key={taskItem.id} data={taskItem}/>
                             })
                             :
