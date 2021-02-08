@@ -1,22 +1,11 @@
-import React  from 'react';
+import React, {useEffect, useRef , useCallback} from 'react';
 import styles from './index.module.css';
 import TaskItem from "../taskItem";
 import Loader from "../../../loader";
 import db from '../../../../firebase';
 
 const DashCell = ({data,loader,err,status,title,updateTasks}) => {
-
-    // useEffect(() => {
-    //     const dragZones = document.querySelectorAll(styles.dragZone)
-    //     console.log(dragZones)
-    //     dragZones.forEach(item => {
-    //         item.addEventListener('onDragEnter',handleDragEnter)
-    //         item.addEventListener('onDragLeave',handleDragLeave)
-    //         item.addEventListener('onDrop',handleDrop)
-    //
-    //     })
-    // }, [])
-
+    const dragZoneRef = useRef()
 
     const handleDragLeave = e => {
         e.preventDefault();
@@ -38,7 +27,7 @@ const DashCell = ({data,loader,err,status,title,updateTasks}) => {
 
 
 
-    const  handleDrop = (e) => {
+    const handleDrop = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
         e.target.classList.remove(styles.hoveredZone)
@@ -60,18 +49,36 @@ const DashCell = ({data,loader,err,status,title,updateTasks}) => {
             })
             .finally(() => e.dataTransfer.clearData())
 
-    }
+    },[status,updateTasks])
+
+
+
+    useEffect(() => {
+        const cur = dragZoneRef.current
+        if(dragZoneRef.current){
+            cur.addEventListener('dragleave',handleDragLeave)
+            cur.addEventListener('dragenter',handleDragEnter)
+            cur.addEventListener('dragover',handleDragOver)
+            cur.addEventListener('drop',handleDrop)
+        }
+        return () => {
+            cur.removeEventListener('dragleave',handleDragLeave)
+            cur.removeEventListener('dragenter',handleDragEnter)
+            cur.removeEventListener('dragover',handleDragOver)
+            cur.removeEventListener('drop',handleDrop)
+        }
+    }, [ handleDrop ] )
+
+
+
 
     return (
 
         <div className={styles.cell}>
             <h2> {title} </h2>
             <div className={styles.dragZone}
-                 onDragLeave={handleDragLeave}
-                 onDragOver={handleDragOver}
-                 onDragEnter={handleDragEnter}
-                 onDrop={handleDrop}
                  data-name={status}
+                 ref={dragZoneRef}
             >
                 {
                     !loader ?

@@ -65,8 +65,6 @@ const DashBody = () => {
     }
 
 
-
-
     return (
         <div className={styles.dragMain}>
             {cells.map((cell,i) => {
