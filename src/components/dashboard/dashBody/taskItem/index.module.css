@@ -1,20 +1,32 @@
 .taskItem{
-    padding: 15px 0;
+    padding: 15px 10px;
     margin: 10px 0;
     border: 1px solid black;
     border-radius: 5px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: relative;
 }
 .taskDelEdit{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 60px;
+    width: 45px;
 }
 .taskDelEdit > svg{
     cursor: pointer;
 }
 .hideItem{
     display: none;
+}
+.editInp{
+    width: 150px;
+    height: 25px;
+    padding: 0 15px;
+    margin-top: 15px;
+}
+.updateBtn{
+    margin-top: 15px;
+    cursor: pointer;
 }

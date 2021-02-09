@@ -84,7 +84,7 @@ const DashCell = ({data,loader,err,status,title,updateTasks}) => {
                     !loader ?
                         !err ?
                             data.map(taskItem => {
-                                return <TaskItem key={taskItem.id} data={taskItem}/>
+                                return <TaskItem key={taskItem.id} data={taskItem} updateTasks={updateTasks}/>
                             })
                             :
                             <p className={styles.pError}>{err}</p>
